@@ -37,8 +37,11 @@ function AdminLogin() {
         window.location.href = '/admin/panel';
       }
     } catch (error) {
-      console.log(error);
-      setMessage(error.response?.data?.error || 'Ocurrió un error al iniciar sesión.');
+      if(error.response?.data?.error === 'Error email or password.') {
+        setMessage('Error de usuario o contraseña');
+      } else {
+        setMessage('Ocurrió un error al iniciar sesión.');
+      }
     } finally {
       setSubmitting(false);
     }

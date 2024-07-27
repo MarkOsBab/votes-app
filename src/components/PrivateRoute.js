@@ -19,9 +19,11 @@ const PrivateRoute = () => {
           'api-token-key': process.env.REACT_APP_API_KEY,
         }
       });
+
       const newToken = response.data.access_token;
       const encryptedToken = CryptoJS.AES.encrypt(newToken, jwtSecret).toString();
       Cookies.set('auth_token', encryptedToken, { expires: 1, secure: true, sameSite: 'Strict' });
+      
       setIsAuthenticated(true);
     } catch (e) {
       Cookies.remove('auth_token');
