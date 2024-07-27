@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 function VoterForm() {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting] = useState(false);
   const [messages, setMessages] = useState([]);
   const [messageType, setMessageType] = useState('');
 
@@ -18,7 +18,7 @@ function VoterForm() {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const response = await axios.get(`${apiUrl}candidates`, {
+        const response = await axios.get(`${apiUrl}/candidates`, {
           headers: {
             'api-token-key': apiKey,
           }
@@ -47,7 +47,7 @@ function VoterForm() {
     setMessageType('');
 
     try {
-      await axios.post(`${apiUrl}votes`, values, {
+      await axios.post(`${apiUrl}/votes`, values, {
         headers: {
           'api-token-key': apiKey,
         }
