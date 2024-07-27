@@ -6,15 +6,29 @@ function AdminLogin() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY;
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+    try {
+      const response = await axios.post(`${apiUrl}auth/login`, { email, password }, {
+        headers: {
+          'api-token-key': apiKey,
+        }
+      });
+      setMessage('Acceso correcto');
+      if (response.status) {
+        window.location.href = '/admin/panel';
+      }
+    } catch (error) {
+      setMessage(error.response.data.message);
+    }
   };
 
   return (
     <form onSubmit={handleLogin} className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
       <div className="mb-4">
-        <label htmlFor="email" className="block text-gray-700">Email:</label>
+        <label htmlFor="email" className="block text-gray-700 text-left">Email:</label>
         <input
           type="email"
           id="email"
@@ -25,7 +39,7 @@ function AdminLogin() {
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="password" className="block text-gray-700">Contraseña:</label>
+        <label htmlFor="password" className="block text-gray-700 text-left">Contraseña:</label>
         <input
           type="password"
           id="password"
