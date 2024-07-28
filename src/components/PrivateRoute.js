@@ -14,9 +14,13 @@ const PrivateRoute = () => {
 
   const refreshAuthToken = useCallback(async () => {
     try {
+      const bytes = CryptoJS.AES.decrypt(authToken, jwtSecret);
+      const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
+
       const response = await axios.post(`${apiUrl}/auth/refresh`, {}, {
         headers: {
           'api-token-key': process.env.REACT_APP_API_KEY,
+          'Authorization': `Bearer ${decryptedToken}`
         }
       });
 
