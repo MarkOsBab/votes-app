@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import Stats from '../components/Dashboard/Stats';
 import Notification from '../components/Dashboard/Notification';
-import Loader from '../components/Loader'; // Importa tu componente Loader
+import Loader from '../components/Loader';
 
 function AdminPanel() {
   const navigate = useNavigate();
