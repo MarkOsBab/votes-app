@@ -8,9 +8,9 @@ import axios from 'axios';
 const PrivateRoute = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const jwtSecret = process.env.REACT_APP_JWT_SECRET;
   const apiUrl = process.env.REACT_APP_API_URL;
   const authToken = Cookies.get('auth_token');
+  const jwtSecret = process.env.REACT_APP_JWT_SECRET;
 
   const refreshAuthToken = useCallback(async () => {
     try {
@@ -66,7 +66,7 @@ const PrivateRoute = () => {
   }, [authToken, jwtSecret, refreshAuthToken]);
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div></div>
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/admin" />;
