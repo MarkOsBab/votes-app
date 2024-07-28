@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaBars, FaTimes, FaVoteYea, FaList, FaUserPlus, FaKey, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaVoteYea, FaList, FaUserPlus, FaKey, FaSignOutAlt, FaUsers } from 'react-icons/fa';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
+import Stats from '../components/Dashboard/Stats';
+import Notification from '../components/Dashboard/Notification';
+import Loader from '../components/Loader'; // Importa tu componente Loader
 
 function AdminPanel() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [logoutError, setLogoutError] = useState('');
+  const [stats, setStats] = useState({});
+  const [loader, setLoader] = useState(true);
+  const [notification, setNotification] = useState({ show: false, type: '', message: '' });
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const apiKey = process.env.REACT_APP_API_KEY;
@@ -18,6 +23,32 @@ function AdminPanel() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    const getStats = async () => {
+      setLoader(true);
+      try {
+        const bytes = CryptoJS.AES.decrypt(authToken, jwtSecret);
+        const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
+
+        const response = await axios.get(`${apiUrl}/dashboard/stats`, {
+          headers: {
+            'api-token-key': apiKey,
+            'Authorization': `Bearer ${decryptedToken}`
+          }
+        });
+
+        if(response.status === 200) {
+          setLoader(false);
+          setStats(response.data);
+        }
+      } catch(error) {
+        setLoader(false);
+        setNotification({ show: true, type: 'error', message: 'Error obteniendo las estadísticas' });
+      }
+    }
+    getStats();
+  }, [authToken, jwtSecret, apiUrl, apiKey]);
 
   const logoutAdmin = async (e) => {
     e.preventDefault();
@@ -31,14 +62,14 @@ function AdminPanel() {
         }
       });
 
-      if(response.status == 200) {
+      if (response.status === 200) {
         Cookies.remove('auth_token');
         navigate('/admin');
       }
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
       Cookies.remove('auth_token');
-      setLogoutError('Error inesperado al cerrar la sesión, serás redirigido');
+      navigate('/admin');
+      setNotification({ show: true, type: 'error', message: 'Error inesperado al cerrar la sesión, serás redirigido' });
     }
   }
 
@@ -73,18 +104,56 @@ function AdminPanel() {
           </NavLink>
         </nav>
         <div className="px-4 py-6">
-        <button onClick={logoutAdmin} className="w-full bg-white text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200 hover:bg-gray-300 flex items-center justify-center">
-          <FaSignOutAlt className="text-1xl" />
-          {isSidebarOpen && <span className="ml-3">Cerrar sesión</span>}
-        </button>
+          <button onClick={logoutAdmin} className="w-full bg-white text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200 hover:bg-gray-300 flex items-center justify-center">
+            <FaSignOutAlt className="text-1xl" />
+            {isSidebarOpen && <span className="ml-3">Cerrar sesión</span>}
+          </button>
         </div>
       </aside>
       <main className="flex-grow bg-gray-100 p-6 transition-all duration-300">
         <h2 className="text-1xl font-bold mb-4">Dashboard</h2>
-        <div>
-          
-        </div>
+        {loader ? (
+          <Loader />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Stats 
+              title="Total votantes" 
+              icon={FaUsers} 
+              borderClass="border-blue-200" 
+              borderClassHover="hover:border-blue-400/80"
+              quantity={stats.totalVoters || 0} 
+            />
+            <Stats 
+              title="Votos Totales" 
+              icon={FaVoteYea} 
+              borderClass="border-orange-200" 
+              borderClassHover="hover:border-orange-400/80"
+              quantity={stats.totalVotes || 0} 
+            />
+            <Stats 
+              title="Candidatos" 
+              icon={FaUsers} 
+              borderClass="border-green-200" 
+              borderClassHover="hover:border-green-400/80"
+              quantity={stats.candidates || 0} 
+            />
+            <Stats 
+              title="Votantes sin Voto" 
+              icon={FaUsers} 
+              borderClass="border-red-200" 
+              borderClassHover="hover:border-red-400/80"
+              quantity={stats.votersWithoutVotes || 0} 
+            />
+          </div>
+        )}
       </main>
+      {notification.show && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onClose={() => setNotification({ show: false, type: '', message: '' })}
+        />
+      )}
     </div>
   );
 }
