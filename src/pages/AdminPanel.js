@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaVoteYea, FaList, FaUserPlus, FaKey, FaSignOutAlt } from 'react-icons/fa';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 
 function AdminPanel() {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [logoutError, setLogoutError] = useState('');
 
@@ -32,7 +33,7 @@ function AdminPanel() {
 
       if(response.status == 200) {
         Cookies.remove('auth_token');
-        window.location.href = '/admin';
+        navigate('/admin');
       }
     } catch(error) {
       console.log(error);

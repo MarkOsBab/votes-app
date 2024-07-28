@@ -8,8 +8,10 @@ import ButtonLoader from './ButtonLoader';
 import ValidationErrorMessage from './ValidationErrorMessage';
 import Loader from './Loader';
 import AnimatedTitle from './AnimatedTitle';
+import { useNavigate } from 'react-router-dom';
 
 function AdminLogin() {
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +48,7 @@ function AdminLogin() {
         const token = response.data.access_token;
         const encryptedToken = CryptoJS.AES.encrypt(token, jwtSecret).toString();
         Cookies.set('auth_token', encryptedToken, { expires: 1, secure: true, sameSite: 'Strict' });
-        window.location.href = '/admin/panel';
+        navigate('/admin/panel');
       }
     } catch (error) {
       if (error.response?.data?.error === 'Error email or password.') {
