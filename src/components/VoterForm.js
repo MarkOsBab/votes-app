@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import ValidationErrorMessage from './ValidationErrorMessage';
 import AnimatedTitle from './AnimatedTitle';
 
-function VoterForm() {
+function VoterForm({ onNewVote }) {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting] = useState(false);
@@ -23,7 +23,7 @@ function VoterForm() {
         const response = await axios.get(`${apiUrl}/candidates`, {
           headers: {
             'api-token-key': apiKey,
-          }
+          },
         });
         setCandidates(response.data);
         setLoading(false);
@@ -49,14 +49,15 @@ function VoterForm() {
     setMessageType('');
 
     try {
-      await axios.post(`${apiUrl}/votes`, values, {
+      const response = await axios.post(`${apiUrl}/votes`, values, {
         headers: {
           'api-token-key': apiKey,
-        }
+        },
       });
 
       setMessages(['Voto registrado con éxito']);
       setMessageType('success');
+      onNewVote(response.data);
     } catch (error) {
       if (error.response && error.response.data) {
         const errors = error.response.data;
@@ -89,7 +90,7 @@ function VoterForm() {
   return (
     <>
       {loading && <Loader />}
-      <div className={`transition-opacity duration-1000 ${loading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`size-3/4 transition-opacity duration-1000 ${loading ? 'opacity-0' : 'opacity-100'}`}>
         <Formik
           initialValues={{ document: '', candidate: '' }}
           validationSchema={validationSchema}
@@ -98,7 +99,7 @@ function VoterForm() {
           {({ isSubmitting }) => (
             <Form className="w-full bg-white p-20 rounded-xl shadow-sm hover:shadow-lg transition-all duration-1000 ease-in-out">
               <div className="w-full flex flex-col">
-                <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-blue-500">
+                <h1 className="mb-4 text-sm font-extrabold leading-none tracking-tight xs:text-md sm:text-lg md:text-2xl lg:text-4xl text-blue-500">
                   <AnimatedTitle text="Votá tu candidato" />
                 </h1>
                 <p className="mb-6 text-lg font-normal text-gray-500">Ingrese su número de documento y seleccione el candidato al que desea votar</p>
