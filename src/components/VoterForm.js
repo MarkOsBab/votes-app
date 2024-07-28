@@ -2,8 +2,34 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loader from './Loader';
 import ButtonLoader from './ButtonLoader';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { animated, useTrail } from '@react-spring/web';
+import ValidationErrorMessage from './ValidationErrorMessage';
+
+const AnimatedTitle = ({ text }) => {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    setItems(text.split(''));
+  }, [text]);
+
+  const trail = useTrail(items.length, {
+    opacity: 1,
+    transform: 'translate3d(0,0px,0px)',
+    from: { opacity: 0, transform: 'translate3d(0,100px,0)' },
+    config: { mass: 1, tension: 2000, friction: 100 },
+  });
+
+  return (
+    <div className="flex space-x-1">
+      {trail.map((props, index) => (
+        <animated.span key={index} style={props}>
+          {items[index] === ' ' ? '\u00A0' : items[index]}
+        </animated.span>
+      ))}
+    </div>
+  );
+};
 
 function VoterForm() {
   const [candidates, setCandidates] = useState([]);
@@ -94,41 +120,47 @@ function VoterForm() {
           onSubmit={handleVote}
         >
           {({ isSubmitting }) => (
-            <Form className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
-              <div className="mb-6">
-                <label htmlFor="document" className="block text-gray-700 text-left text-lg">Documento:</label>
+            <Form className="w-full bg-white p-20 rounded-xl shadow-sm hover:shadow-lg transition-all duration-1000 ease-in-out">
+              <div className="w-full flex flex-col">
+                <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-blue-500">
+                  <AnimatedTitle text="Votá tu candidato" />
+                </h1>
+                <p className="mb-6 text-lg font-normal text-gray-500">Ingrese su número de documento y seleccione el candidato al que desea votar</p>
+              </div>
+              <div className="relative z-0 w-full mb-6 group">
                 <Field
                   type="text"
                   name="document"
                   id="document"
-                  className="w-full px-4 py-3 border rounded text-lg"
-                  placeholder="Ingresa el documento para votar"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
                 />
-                <ErrorMessage name="document" component="div" className="text-red-500 text-sm mt-1" />
+                <label htmlFor="document" className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Documento</label>
+                <ValidationErrorMessage name="document" />
               </div>
-              <div className="mb-6">
-                <label htmlFor="candidate" className="block text-gray-700 text-left text-lg">Candidato:</label>
+              <div className="relative z-0 w-full mb-6 group">
                 <Field
                   as="select"
                   name="candidate"
                   id="candidate"
-                  className="w-full px-4 py-3 border rounded text-lg"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 >
-                  <option value="">Seleccione un candidato</option>
+                  <option value="" className="text-gray-500">Seleccione un candidato</option>
                   {candidates.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                    <option key={c.id} value={c.id} className="text-black">{c.name}</option>
                   ))}
                 </Field>
-                <ErrorMessage name="candidate" component="div" className="text-red-500 text-sm mt-1" />
+                <label htmlFor="candidate" className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Candidato</label>
+                <ValidationErrorMessage name="candidate" />
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-700 flex justify-center items-center text-lg"
+                className="w-full flex justify-center px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 disabled={isSubmitting || submitting}
               >
                 {isSubmitting || submitting ? <ButtonLoader /> : 'Votar'}
               </button>
-              <ul className={`max-w-md space-y-2 list-disc list-inside text-left py-4 ${messageType === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+              <ul className={`max-w-md space-y-2 list-disc list-inside text-left py-4 transition-opacity duration-1000 ${messageType === 'success' ? 'text-green-700' : 'text-red-700'} ${messages.length > 0 ? 'opacity-100' : 'opacity-0'}`}>
                 {messages.length > 0 && (
                   messages.map((msg, index) => (
                     <li key={index}>{msg}</li>
