@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import VoteDetailModal from './VoteDetailModal';
-import Loader from './Loader';
-
-function Votes({ votes, setVotes, totalPages, currentPage, setCurrentPage, loading }) {
+import Placeholder from './Placeholder';
+function Votes({ votes, totalPages, currentPage, setCurrentPage, loading }) {
   const [selectedVote, setSelectedVote] = useState(null);
-
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const apiKey = process.env.REACT_APP_API_KEY;
-
   const handleVoteClick = (vote) => {
     setSelectedVote(vote);
   };
@@ -51,11 +45,7 @@ function Votes({ votes, setVotes, totalPages, currentPage, setCurrentPage, loadi
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan="4" className="text-center py-4">
-                  <Loader />
-                </td>
-              </tr>
+              Array.from({ length: 10 }).map((_, index) => <Placeholder columns={4} key={index} />)
             ) : votes.length > 0 ? (
               votes.map((vote) => (
                 <tr key={vote.id} className="hover:bg-gray-50">

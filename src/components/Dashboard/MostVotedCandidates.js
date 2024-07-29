@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import Loader from '../Loader';
 import CandidatesTable from './CandidatesTable';
+import Placeholder from '../Placeholder';
 
 function MostVotedCandidates() {
   const [candidates, setCandidates] = useState([]);
@@ -41,7 +42,17 @@ function MostVotedCandidates() {
     <div className="p-6 mt-4 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-normal text-gray-900 mb-2">Candidatos Más Votados</h2>
       {loading ? (
-        <Loader />
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">Nombre</th>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">Votos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 10 }).map((_, index) => <Placeholder columns={2} key={index} />)}
+          </tbody>
+        </table>
       ) : (
         <CandidatesTable candidates={candidates} />
       )}
