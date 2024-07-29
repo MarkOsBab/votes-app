@@ -8,7 +8,7 @@ import ButtonLoader from './ButtonLoader';
 import ValidationErrorMessage from './ValidationErrorMessage';
 import Loader from './Loader';
 import AnimatedTitle from './AnimatedTitle';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -115,6 +115,9 @@ function AdminLogin() {
             </Form>
           )}
         </Formik>
+        <div className="w-full flex justify-center items-end">
+          <Link to="/" className="mt-4 text-blue-500 hover:underline">Inicio</Link>
+        </div>
       </div>
     </>
   );
