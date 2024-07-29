@@ -14,6 +14,8 @@
     "customize-cra": "^1.0.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.19",
+    "highcharts": "^11.4.6",
+    "highcharts-react-official": "^3.2.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",

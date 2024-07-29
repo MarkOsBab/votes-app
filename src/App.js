@@ -5,6 +5,7 @@ import AdminPage from './pages/AdminPage';
 import AdminPanel from './pages/AdminPanel';
 import PrivateRoute from './components/PrivateRoute';
 import './App.css';
+import ChangeAdminPassword from './pages/ChangeAdminPassword';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route element={<PrivateRoute />}>
-          <Route path="/admin/panel/*" element={<AdminPanel />} />
+          <Route path="/admin/panel" element={<AdminPanel />} />
+          <Route path="/admin/panel/change-password" element={<ChangeAdminPassword />} />
         </Route>
         </Routes>
       </div>

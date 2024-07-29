@@ -78,7 +78,7 @@ function Notification({ type, message, onClose }) {
           {icon}
           <span className="sr-only">Icon</span>
         </div>
-        <div className="ml-3 text-sm font-normal text-white m-1.5">{message}</div>
+        <div className={`ml-3 text-sm font-normal m-1.5 ${textColor}`}>{message}</div>
         <button
           onClick={() => setShow(false)}
           type="button"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaBars, FaTimes, FaVoteYea, FaList, FaUserPlus, FaKey, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaVoteYea, FaList, FaUserPlus, FaKey, FaSignOutAlt, FaHome } from 'react-icons/fa';
 
 function Sidebar({ isOpen, toggleSidebar, logoutAdmin }) {
   return (
@@ -15,9 +15,9 @@ function Sidebar({ isOpen, toggleSidebar, logoutAdmin }) {
         </button>
       </div>
       <nav className="flex-grow px-4 py-6">
-        <NavLink to="#mostVoted" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
-          <FaVoteYea className="text-1xl" />
-          {isOpen && <span className="ml-3">Más votados</span>}
+        <NavLink to="/admin/panel" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
+          <FaHome className="text-1xl" />
+          {isOpen && <span className="ml-3">Inicio</span>}
         </NavLink>
         <NavLink to="#votes" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
           <FaList className="text-1xl" />
@@ -27,7 +27,7 @@ function Sidebar({ isOpen, toggleSidebar, logoutAdmin }) {
           <FaUserPlus className="text-1xl" />
           {isOpen && <span className="ml-3">Nuevo votante</span>}
         </NavLink>
-        <NavLink to="#changePassword" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
+        <NavLink to="change-password" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
           <FaKey className="text-1xl" />
           {isOpen && <span className="ml-3">Modificar clave</span>}
         </NavLink>
