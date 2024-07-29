@@ -5,6 +5,7 @@ import CryptoJS from 'crypto-js';
 import { FaCheckCircle, FaExclamationTriangle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Sidebar from '../components/Dashboard/Sidebar';
 import ButtonLoader from '../components/ButtonLoader';
+import Loader from '../components/Loader';
 
 function ChangeAdminPasswordPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -17,6 +18,7 @@ function ChangeAdminPasswordPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fullScreenLoading, setFullScreenLoading] = useState(true);
   const [validations, setValidations] = useState({
     minLength: false,
     maxLength: false,
@@ -29,6 +31,15 @@ function ChangeAdminPasswordPage() {
   const apiKey = process.env.REACT_APP_API_KEY;
   const authToken = Cookies.get('auth_token');
   const jwtSecret = process.env.REACT_APP_JWT_SECRET;
+
+  useEffect(() => {
+    const smoothLoading = () => {
+      setTimeout(() => {
+        setFullScreenLoading(false);
+      }, 500);
+    };
+    smoothLoading();
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -113,101 +124,104 @@ function ChangeAdminPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <main className={`flex-grow bg-gray-100 p-6 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
-        <div className="flex items-center justify-center bg-gray-100 mt-8">
-          <form onSubmit={handleSubmit} className="w-full max-w-6xl bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-2xl font-normal text-gray-900 mb-2">Modificar clave</h2>
-            <div className="mb-4 relative">
-              <label htmlFor="currentPassword" className="block text-gray-700">Clave actual</label>
-              <input 
-                type={showCurrentPassword ? "text" : "password"} 
-                id="currentPassword" 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-              />
+    <>
+      {fullScreenLoading && <Loader />}
+      <div className={`min-h-screen flex transition-opacity duration-1000 ${fullScreenLoading ? 'opacity-0' : 'opacity-100'}`}>
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <main className={`flex-grow bg-gray-100 p-6 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
+          <div className="flex items-center justify-center bg-gray-100 mt-8">
+            <form onSubmit={handleSubmit} className="w-full max-w-6xl bg-white p-8 rounded-lg shadow-md">
+              <h2 className="text-2xl font-normal text-gray-900 mb-2">Modificar clave</h2>
+              <div className="mb-4 relative">
+                <label htmlFor="currentPassword" className="block text-gray-700">Clave actual</label>
+                <input 
+                  type={showCurrentPassword ? "text" : "password"} 
+                  id="currentPassword" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  required
+                />
+                <button 
+                  type="button"
+                  className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                >
+                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              <div className="mb-4 flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+                <div className="relative w-full">
+                  <label htmlFor="newPassword" className="block text-gray-700">Nueva clave</label>
+                  <input 
+                    type={showNewPassword ? "text" : "password"} 
+                    id="newPassword" 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                  <button 
+                    type="button"
+                    className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <div className="relative w-full">
+                  <label htmlFor="confirmPassword" className="block text-gray-700">Confirmar nueva clave</label>
+                  <input 
+                    type={showConfirmPassword ? "text" : "password"} 
+                    id="confirmPassword" 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button 
+                    type="button"
+                    className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
+              {success && <div className="mb-4 text-green-500 text-sm flex gap-2 items-center"><FaCheckCircle size={16}/>{success}</div>}
+              {error && <div className="mb-4 text-red-500 text-sm flex gap-2 items-center"><FaExclamationTriangle size={16}/>{error}</div>}
+              <ul className="mb-4 text-sm text-gray-700">
+                <li className={`flex items-center ${validations.minLength ? 'text-green-600' : 'text-red-600'}`}>
+                  {validations.minLength ? '✔️' : '❌'} Mínimo 6 caracteres
+                </li>
+                <li className={`flex items-center ${validations.maxLength ? 'text-green-600' : 'text-red-600'}`}>
+                  {validations.maxLength ? '✔️' : '❌'} Máximo 16 caracteres
+                </li>
+                <li className={`flex items-center ${validations.hasUppercase ? 'text-green-600' : 'text-red-600'}`}>
+                  {validations.hasUppercase ? '✔️' : '❌'} Una letra mayúscula
+                </li>
+                <li className={`flex items-center ${validations.hasSymbol ? 'text-green-600' : 'text-red-600'}`}>
+                  {validations.hasSymbol ? '✔️' : '❌'} Un símbolo
+                </li>
+                <li className={`flex items-center ${validations.passwordsMatch && newPassword !== '' ? 'text-green-600' : 'text-red-600'}`}>
+                  {validations.passwordsMatch && newPassword !== '' ? '✔️' : '❌'} Las claves coinciden
+                </li>
+                <li className={`flex items-center ${newPassword === currentPassword && newPassword !== '' ? 'text-red-600' : 'text-green-600'}`}>
+                  {newPassword === currentPassword && newPassword !== '' ? '❌' : '✔️'} La nueva clave no puede ser igual a la anterior
+                </li>
+              </ul>
               <button 
-                type="button"
-                className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                type="submit" 
+                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+                disabled={!validations.minLength || !validations.maxLength || !validations.hasUppercase || !validations.hasSymbol || !validations.passwordsMatch || newPassword === currentPassword}
               >
-                {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                {loading ? <ButtonLoader /> : 'Actualizar clave'}
               </button>
-            </div>
-            <div className="mb-4 flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
-              <div className="relative w-full">
-                <label htmlFor="newPassword" className="block text-gray-700">Nueva clave</label>
-                <input 
-                  type={showNewPassword ? "text" : "password"} 
-                  id="newPassword" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                />
-                <button 
-                  type="button"
-                  className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                >
-                  {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-              <div className="relative w-full">
-                <label htmlFor="confirmPassword" className="block text-gray-700">Confirmar nueva clave</label>
-                <input 
-                  type={showConfirmPassword ? "text" : "password"} 
-                  id="confirmPassword" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-                <button 
-                  type="button"
-                  className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-            {success && <div className="mb-4 text-green-500 text-sm flex gap-2 items-center"><FaCheckCircle size={16}/>{success}</div>}
-            {error && <div className="mb-4 text-red-500 text-sm flex gap-2 items-center"><FaExclamationTriangle size={16}/>{error}</div>}
-            <ul className="mb-4 text-sm text-gray-700">
-              <li className={`flex items-center ${validations.minLength ? 'text-green-600' : 'text-red-600'}`}>
-                {validations.minLength ? '✔️' : '❌'} Mínimo 6 caracteres
-              </li>
-              <li className={`flex items-center ${validations.maxLength ? 'text-green-600' : 'text-red-600'}`}>
-                {validations.maxLength ? '✔️' : '❌'} Máximo 16 caracteres
-              </li>
-              <li className={`flex items-center ${validations.hasUppercase ? 'text-green-600' : 'text-red-600'}`}>
-                {validations.hasUppercase ? '✔️' : '❌'} Una letra mayúscula
-              </li>
-              <li className={`flex items-center ${validations.hasSymbol ? 'text-green-600' : 'text-red-600'}`}>
-                {validations.hasSymbol ? '✔️' : '❌'} Un símbolo
-              </li>
-              <li className={`flex items-center ${validations.passwordsMatch && newPassword !== '' ? 'text-green-600' : 'text-red-600'}`}>
-                {validations.passwordsMatch && newPassword !== '' ? '✔️' : '❌'} Las claves coinciden
-              </li>
-              <li className={`flex items-center ${newPassword === currentPassword && newPassword !== '' ? 'text-red-600' : 'text-green-600'}`}>
-                {newPassword === currentPassword && newPassword !== '' ? '❌' : '✔️'} La nueva clave no puede ser igual a la anterior
-              </li>
-            </ul>
-            <button 
-              type="submit" 
-              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
-              disabled={!validations.minLength || !validations.maxLength || !validations.hasUppercase || !validations.hasSymbol || !validations.passwordsMatch || newPassword === currentPassword}
-            >
-              {loading ? <ButtonLoader /> : 'Actualizar clave'}
-            </button>
-          </form>
-        </div>
-      </main>
-    </div>
+            </form>
+          </div>
+        </main>
+      </div>
+    </>
   );
 }
 

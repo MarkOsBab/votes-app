@@ -19,15 +19,11 @@ function Sidebar({ isOpen, toggleSidebar, logoutAdmin }) {
           <FaHome className="text-1xl" />
           {isOpen && <span className="ml-3">Inicio</span>}
         </NavLink>
-        <NavLink to="#votes" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
-          <FaList className="text-1xl" />
-          {isOpen && <span className="ml-3">Votos ingresados</span>}
-        </NavLink>
-        <NavLink to="#addVoter" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
+        <NavLink to="/admin/panel/add-voter" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
           <FaUserPlus className="text-1xl" />
           {isOpen && <span className="ml-3">Nuevo votante</span>}
         </NavLink>
-        <NavLink to="change-password" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
+        <NavLink to="/admin/panel/change-password" className="flex items-center px-4 py-2 rounded-lg hover:bg-gray-700 mb-2 transition duration-200">
           <FaKey className="text-1xl" />
           {isOpen && <span className="ml-3">Modificar clave</span>}
         </NavLink>
