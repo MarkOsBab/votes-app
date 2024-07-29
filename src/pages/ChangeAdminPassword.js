@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import { FaCheckCircle, FaExclamationTriangle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Sidebar from '../components/Dashboard/Sidebar';
-import Loader from '../components/Loader';
 import ButtonLoader from '../components/ButtonLoader';
 
 function ChangeAdminPasswordPage() {
@@ -118,8 +117,8 @@ function ChangeAdminPasswordPage() {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <main className={`flex-grow bg-gray-100 p-6 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
         <div className="flex items-center justify-center bg-gray-100 mt-8">
-          <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-6">Modificar clave</h2>
+          <form onSubmit={handleSubmit} className="w-full max-w-6xl bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-2xl font-normal text-gray-900 mb-2">Modificar clave</h2>
             <div className="mb-4 relative">
               <label htmlFor="currentPassword" className="block text-gray-700">Clave actual</label>
               <input 
@@ -138,41 +137,43 @@ function ChangeAdminPasswordPage() {
                 {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
-            <div className="mb-4 relative">
-              <label htmlFor="newPassword" className="block text-gray-700">Nueva clave</label>
-              <input 
-                type={showNewPassword ? "text" : "password"} 
-                id="newPassword" 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-              />
-              <button 
-                type="button"
-                className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-              >
-                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-            <div className="mb-4 relative">
-              <label htmlFor="confirmPassword" className="block text-gray-700">Confirmar nueva clave</label>
-              <input 
-                type={showConfirmPassword ? "text" : "password"} 
-                id="confirmPassword" 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              <button 
-                type="button"
-                className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
+            <div className="mb-4 flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
+              <div className="relative w-full">
+                <label htmlFor="newPassword" className="block text-gray-700">Nueva clave</label>
+                <input 
+                  type={showNewPassword ? "text" : "password"} 
+                  id="newPassword" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <button 
+                  type="button"
+                  className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                >
+                  {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              <div className="relative w-full">
+                <label htmlFor="confirmPassword" className="block text-gray-700">Confirmar nueva clave</label>
+                <input 
+                  type={showConfirmPassword ? "text" : "password"} 
+                  id="confirmPassword" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <button 
+                  type="button"
+                  className="absolute right-0 px-3 py-3 text-gray-500 focus:outline-none"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
             </div>
             {success && <div className="mb-4 text-green-500 text-sm flex gap-2 items-center"><FaCheckCircle size={16}/>{success}</div>}
             {error && <div className="mb-4 text-red-500 text-sm flex gap-2 items-center"><FaExclamationTriangle size={16}/>{error}</div>}
