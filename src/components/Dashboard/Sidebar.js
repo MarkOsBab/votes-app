@@ -1,8 +1,41 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { FaBars, FaTimes, FaVoteYea, FaList, FaUserPlus, FaKey, FaSignOutAlt, FaHome } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { FaBars, FaTimes, FaUserPlus, FaKey, FaSignOutAlt, FaHome } from 'react-icons/fa';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
 
-function Sidebar({ isOpen, toggleSidebar, logoutAdmin }) {
+function Sidebar({ isOpen, toggleSidebar }) {
+  const navigate = useNavigate();
+  const [notification, setNotification] = useState({ show: false, type: '', message: '' });
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const authToken = Cookies.get('auth_token');
+  const jwtSecret = process.env.REACT_APP_JWT_SECRET;
+
+  const logoutAdmin = async (e) => {
+    e.preventDefault();
+    try {
+      const bytes = CryptoJS.AES.decrypt(authToken, jwtSecret);
+      const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
+      const response = await axios.post(`${apiUrl}/auth/logout`, {}, {
+        headers: {
+          'api-token-key': apiKey,
+          'Authorization': `Bearer ${decryptedToken}`
+        }
+      });
+
+      if (response.status === 200) {
+        Cookies.remove('auth_token');
+        navigate('/admin');
+      }
+    } catch (error) {
+      Cookies.remove('auth_token');
+      navigate('/admin');
+      setNotification({ show: true, type: 'error', message: 'Error inesperado al cerrar la sesión, serás redirigido' });
+    }
+  }
   return (
     <aside className={`fixed inset-y-0 left-0 bg-gray-800 text-white flex flex-col ${isOpen ? 'w-64' : 'w-20'} transition-all duration-300`}>
       <div className="h-16 flex items-center justify-between shadow-md px-4">

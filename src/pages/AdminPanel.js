@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
@@ -13,7 +13,6 @@ import Sidebar from '../components/Dashboard/Sidebar';
 import { FaUsers, FaVoteYea } from 'react-icons/fa';
 
 function AdminPanel() {
-  const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [stats, setStats] = useState({});
@@ -245,32 +244,9 @@ function AdminPanel() {
     }
   };
 
-  const logoutAdmin = async (e) => {
-    e.preventDefault();
-    try {
-      const bytes = CryptoJS.AES.decrypt(authToken, jwtSecret);
-      const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
-      const response = await axios.post(`${apiUrl}/auth/logout`, {}, {
-        headers: {
-          'api-token-key': apiKey,
-          'Authorization': `Bearer ${decryptedToken}`
-        }
-      });
-
-      if (response.status === 200) {
-        Cookies.remove('auth_token');
-        navigate('/admin');
-      }
-    } catch (error) {
-      Cookies.remove('auth_token');
-      navigate('/admin');
-      setNotification({ show: true, type: 'error', message: 'Error inesperado al cerrar la sesión, serás redirigido' });
-    }
-  }
-
   return (
     <div className="min-h-screen flex overflow-x-hidden">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} logoutAdmin={logoutAdmin} />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <main className={`flex-grow bg-gray-100 p-6 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`} onClick={() => setSelectedStat(null)}>
         <h2 className="text-1xl font-bold mb-4">Admin Panel</h2>
         {loader ? (

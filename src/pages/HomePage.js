@@ -8,47 +8,37 @@ import { Link } from 'react-router-dom';
 function HomePage() {
   const [votes, setVotes] = useState([]);
   const [winningCandidate, setWinningCandidate] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const apiKey = process.env.REACT_APP_API_KEY;
 
-  const fetchVotes = useCallback(async () => {
+  const fetchVotes = useCallback(async (page = 1) => {
+    setLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/votes`, {
+      const response = await axios.get(`${apiUrl}/votes?votes=${page}`, {
         headers: {
           'api-token-key': apiKey,
         },
       });
-      setVotes(response.data);
-      updateWinningCandidate(response.data);
+      setVotes(response.data.votes.data);
+      setTotalPages(response.data.votes.last_page);
+      setWinningCandidate(response.data.mostVoted);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching votes:', error);
+      setLoading(false);
     }
   }, [apiUrl, apiKey]);
 
   useEffect(() => {
-    fetchVotes();
-  }, [fetchVotes]);
-
-  const updateWinningCandidate = (votes) => {
-    const candidateVotes = votes.reduce((acc, vote) => {
-      acc[vote.candidate.id] = acc[vote.candidate.id] || { ...vote.candidate, votes: 0 };
-      acc[vote.candidate.id].votes += 1;
-      return acc;
-    }, {});
-
-    const winningCandidate = Object.values(candidateVotes).reduce(
-      (max, candidate) => (candidate.votes > max.votes ? candidate : max),
-      { votes: 0 }
-    );
-
-    setWinningCandidate(winningCandidate.votes > 0 ? winningCandidate : null);
-  };
+    fetchVotes(currentPage);
+  }, [fetchVotes, currentPage]);
 
   const handleNewVote = (newVote) => {
-    const updatedVotes = [...votes, newVote];
-    setVotes(updatedVotes);
-    updateWinningCandidate(updatedVotes);
+    fetchVotes(currentPage);
   };
 
   return (
@@ -58,7 +48,14 @@ function HomePage() {
         <div className="flex justify-center size-3/4 my-2">
           {winningCandidate && <WinningCandidate candidate={winningCandidate} />}
         </div>
-        <Votes votes={votes} setVotes={setVotes} />
+        <Votes 
+          votes={votes} 
+          setVotes={setVotes} 
+          totalPages={totalPages} 
+          currentPage={currentPage} 
+          setCurrentPage={setCurrentPage} 
+          loading={loading} 
+        />
       </div>
       <div className="w-full flex justify-end items-end">
         <Link to="/admin" className="mt-4 text-blue-500 hover:underline">Acceso a Gestión</Link>
