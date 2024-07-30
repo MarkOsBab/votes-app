@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import VoteDetailModal from './VoteDetailModal';
 import Placeholder from './Placeholder';
 function Votes({ votes, totalPages, currentPage, setCurrentPage, loading }) {
@@ -69,34 +69,36 @@ function Votes({ votes, totalPages, currentPage, setCurrentPage, loading }) {
             )}
           </tbody>
         </table>
-        <div className="flex justify-between items-center mt-4">
-          <button 
-            onClick={() => handlePageClick(currentPage - 1)} 
-            disabled={currentPage === 1 || loading} 
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          <div className="flex space-x-1">
-            {getPageNumbers().map((pageNumber) => (
-              <button 
-                key={pageNumber} 
-                onClick={() => handlePageClick(pageNumber)} 
-                disabled={loading}
-                className={`mx-1 px-3 py-1 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} rounded-md hover:bg-blue-700 hover:text-white transition duration-300`}
-              >
-                {pageNumber}
-              </button>
-            ))}
+        {(votes.length >= 10 ?
+          <div className="flex justify-between items-center mt-4">
+            <button 
+              onClick={() => handlePageClick(currentPage - 1)} 
+              disabled={currentPage === 1 || loading} 
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+            >
+              Anterior
+            </button>
+            <div className="flex space-x-1">
+              {getPageNumbers().map((pageNumber) => (
+                <button 
+                  key={pageNumber} 
+                  onClick={() => handlePageClick(pageNumber)} 
+                  disabled={loading}
+                  className={`mx-1 px-3 py-1 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} rounded-md hover:bg-blue-700 hover:text-white transition duration-300`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+            </div>
+            <button 
+              onClick={() => handlePageClick(currentPage + 1)} 
+              disabled={currentPage === totalPages || loading} 
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+            >
+              Siguiente
+            </button>
           </div>
-          <button 
-            onClick={() => handlePageClick(currentPage + 1)} 
-            disabled={currentPage === totalPages || loading} 
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
-          >
-            Siguiente
-          </button>
-        </div>
+        : <></>)}
       </div>
       {selectedVote && (
         <VoteDetailModal vote={selectedVote} onClose={() => setSelectedVote(null)} />

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
-import Loader from '../Loader';
 import CandidatesTable from './CandidatesTable';
 import Placeholder from '../Placeholder';
 
@@ -77,39 +76,41 @@ function MostVotedCandidates() {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 10 }).map((_, index) => <Placeholder columns={2} key={index} />)}
+            {Array.from({ length: 5 }).map((_, index) => <Placeholder columns={2} key={index} />)}
           </tbody>
         </table>
       ) : (
         <>
           <CandidatesTable candidates={currentCandidates} />
-          <div className="flex justify-between items-center mt-4">
-            <button 
-              onClick={() => handlePageClick(currentPage - 1)} 
-              disabled={currentPage === 1} 
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
-            >
-              Anterior
-            </button>
-            <div className="flex space-x-1">
-              {getPageNumbers().map((pageNumber) => (
-                <button 
-                  key={pageNumber} 
-                  onClick={() => handlePageClick(pageNumber)} 
-                  className={`mx-1 px-3 py-1 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} rounded-md hover:bg-blue-700 hover:text-white transition duration-300`}
-                >
-                  {pageNumber}
-                </button>
-              ))}
+          {(currentCandidates.length >= 5 ?
+            <div className="flex justify-between items-center mt-4">
+              <button 
+                onClick={() => handlePageClick(currentPage - 1)} 
+                disabled={currentPage === 1} 
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+              >
+                Anterior
+              </button>
+              <div className="flex space-x-1">
+                {getPageNumbers().map((pageNumber) => (
+                  <button 
+                    key={pageNumber} 
+                    onClick={() => handlePageClick(pageNumber)} 
+                    className={`mx-1 px-3 py-1 border ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'} rounded-md hover:bg-blue-700 hover:text-white transition duration-300`}
+                  >
+                    {pageNumber}
+                  </button>
+                ))}
+              </div>
+              <button 
+                onClick={() => handlePageClick(currentPage + 1)} 
+                disabled={currentPage === totalPages} 
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+              >
+                Siguiente
+              </button>
             </div>
-            <button 
-              onClick={() => handlePageClick(currentPage + 1)} 
-              disabled={currentPage === totalPages} 
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50"
-            >
-              Siguiente
-            </button>
-          </div>
+          : <></>)}
         </>
       )}
     </div>

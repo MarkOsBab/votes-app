@@ -15,16 +15,22 @@ function CandidatesTable({ candidates }) {
           </tr>
         </thead>
         <tbody>
-          {candidates.map((candidate) => (
-            <tr key={candidate.id} className="bg-white border-b hover:bg-gray-50">
-              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                {candidate.name} {candidate.lastname}
-              </td>
-              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                {candidate.votes}
-              </td>
+          {
+          candidates.length > 0 ?
+            candidates.map((candidate) => (
+              <tr key={candidate.id} className="bg-white border-b hover:bg-gray-50">
+                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                  {candidate.name} {candidate.lastname}
+                </td>
+                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                  {candidate.votes}
+                </td>
+              </tr>
+            )) : 
+            <tr>
+              <td colSpan="2" className="text-center py-4">No hay candidatos registrados.</td>
             </tr>
-          ))}
+          }
         </tbody>
       </table>
     </div>

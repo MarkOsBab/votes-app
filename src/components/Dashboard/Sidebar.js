@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaUserPlus, FaKey, FaSignOutAlt, FaHome } from 'react-icons/fa';
+import Notification from './Notification';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
@@ -67,6 +68,13 @@ function Sidebar({ isOpen, toggleSidebar }) {
           {isOpen && <span className="ml-3">Cerrar sesión</span>}
         </button>
       </div>
+      {notification.show && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onClose={() => setNotification({ show: false, type: '', message: '' })}
+        />
+      )}
     </aside>
   );
 }

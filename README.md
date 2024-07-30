@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# Votes APP
+Aplicación realizada para la prueba técnica de [solcre.tech](https://solcre.tech/).
+La aplicación se realizó con [React v18](https://es.react.dev/) y para sus estilos se utilizó [Tailwind CSS](https://tailwindcss.com/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Paquetes - repositorios requeridos para correcto funcionamiento
 
-## Available Scripts
+* [Git](https://git-scm.com/downloads)
+* [Node.js](https://nodejs.org/en/download/package-manager)
+* [Api](https://github.com/MarkOsBab/votes-api)
 
-In the project directory, you can run:
+## Pasos para correr el proyecto
 
-### `npm start`
+* Clonar el repositorio `git clone https://github.com/MarkOsBab/votes-app`
+* Acceder a la carpeta del proyecto `cd votes-app`
+* Instalar todas las dependencias `npm i`
+* Copiar el contenido del archivo [.env.example](https://github.com/MarkOsBab/votes-app/blob/main/.env.example) y crear el archivo .env.local
+    - Referencias de las variables de entorno
+        - REACT_APP_API_URL: Hace referencia a la url de la api  **Recomendado poner http://urlApi.com/api**
+        - REACT_APP_API_KEY: Hace referencia a la KEY utilizada para poder acceder a los endpoints de la api
+        - REACT_APP_JWT_SECRET: Hace referencia a la clave de encripción que se utiliza para los Json web tokens
+* Ejecutar el comando `npm run serve` **Asegurarse de tener la api corriendo**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Vistas y funcionalidades principales
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Inicio (ruta `http://urlProyecto.com/`)
+    - La vista del inicio contiene:
+        - Formulario para realizar los votos donde se podrá ingresar el documento y seleccionar uno de los candidatos
+        - Candidato más votado
+        - Lista de votos realizados con los detalles del votante 
+            - Ver detalle despliega un dialog con todos los detalles del voto seleccionado
+        - Enlace de Acceso a gestión
+- Acceso a gestión (ruta `http://urlProyecto.com/admin`)
+    - La vista de Acceso a gestión contiene:
+        - Formulario de inicio de sesión solo para usuarios administradores
+        - Enlace que redirige a la página de Inicio
+- Gestión (ruta `http://urlProyecto.com/admin/panel`)
+    - La vista contiene:
+        - Sidebar colapsable para hacer más sencillo el uso del sitio en dispositivos con pantalla más pequeñas
+            * Inicio (ruta `http://urlProyecto.com/admin/panel`)
+            * Nuevo votante (ruta `http://urlProyecto.com/admin/panel/add-voter`)
+            * Modificar clave (ruta `http://urlProyecto.com/admin/panel/change-password`)
+            * Cerrar sesión **(petición a api y eliminación de sesión)**
+        - Estadísticas de los votos / votantes
+        - Lista de los candidatos más votados en orden de más votado a menos votado y paginado
+        - Highcharts
+            - Estadísticas de votación (para hacer más visuales las estadísticas que están colocadas en la parte superior)
+            - Votos por candidato (nombre de los candidatos y la cantidad de votos que contiene cada uno de ellos)
+    - Nuevo votante (ruta `http://urlProyecto.com/admin/panel/add-voter`)
+        - En esta vista se podrá crear un nuevo votante
+            - Campos obligatorios para su carga:
+                * Documento
+                * Nombre
+                * Apellido
+                * Fecha de nacimiento
+                * Dirección
+                * Teléfono
+                * Sexo (desplegable)
+                    * Masculino
+                    * Femenino
+                * Tipo de votante
+                    * Candidato
+                    * Votante
+    - Modificar clave (ruta `http://urlProyecto.com/admin/panel/change-password`)
+        - En esta vista se podrá modificar la clave del administrador que contiene la sesión iniciada
+            - Campos obligatorios para el cambio de clave
+                * Clave actual
+                * Nueva clave
+                * Confirmar nueva clave **(misma que Nueva Clave)**
+            - Validaciones para el cambio de contraseña
+                * Mínimo de 6 caracteres
+                * Máximo de 16 caracteres
+                * Una letra mayúscula
+                * Un símbolo
+                * Nueva clave y confirmar nueva clave iguales
+                * Clave nueva distinta a la clave actual

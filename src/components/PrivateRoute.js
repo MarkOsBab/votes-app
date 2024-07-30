@@ -35,7 +35,7 @@ const PrivateRoute = () => {
     } finally {
       setLoading(false);
     }
-  }, [apiUrl, jwtSecret]);
+  }, [authToken, apiUrl, jwtSecret]);
 
   useEffect(() => {
     const checkTokenExpiry = async () => {

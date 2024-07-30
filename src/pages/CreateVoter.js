@@ -92,7 +92,7 @@ function CreateVoter() {
     const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
 
     try {
-      const response = await axios.post(`${apiUrl}/dashboard/management/create-voters`, payload, {
+      await axios.post(`${apiUrl}/dashboard/management/create-voters`, payload, {
         headers: {
           'api-token-key': apiKey,
           'Authorization': `Bearer ${decryptedToken}`
