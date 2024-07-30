@@ -8,7 +8,7 @@ La aplicación se realizó con [React v18](https://es.react.dev/) y para sus est
 * [Node.js](https://nodejs.org/en/download/package-manager)
 * [Api](https://github.com/MarkOsBab/votes-api)
 
-#### Referencias
+## Referencias
 
 1. urlApi.com: Hace referencia a el enlace de la api que tu tengas
 2. urlProyecto.com: Hace referencia al enlace de la app que tu tengas
