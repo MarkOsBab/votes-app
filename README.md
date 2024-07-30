@@ -23,7 +23,7 @@ La aplicación se realizó con [React v18](https://es.react.dev/) y para sus est
         - REACT_APP_API_URL: Hace referencia a la url de la api  **Recomendado poner http://urlApi.com/api**
         - REACT_APP_API_KEY: Hace referencia a la KEY utilizada para poder acceder a los endpoints de la api
         - REACT_APP_JWT_SECRET: Hace referencia a la clave de encripción que se utiliza para los Json web tokens
-* Ejecutar el comando `npm run serve` **Asegurarse de tener la api corriendo**
+* Ejecutar el comando `npm run start` **Asegurarse de tener la api corriendo**
 
 ## Vistas y funcionalidades principales
 
