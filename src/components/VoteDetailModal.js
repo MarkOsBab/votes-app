@@ -12,7 +12,7 @@ function VoteDetailModal({ vote, onClose }) {
         <div className="space-y-4">
           <div className="flex items-center">
             <FaUser className="text-blue-500 mr-2" />
-            <p className="text-lg font-medium"><strong>Votante:</strong> {vote.voter.name} {vote.voter.lastName}</p>
+            <p className="text-lg font-medium"><strong>Votante:</strong> {vote.voter.name} {vote.voter.lastname}</p>
           </div>
           <div className="flex items-center">
             <FaIdCard className="text-blue-500 mr-2" />
@@ -24,7 +24,7 @@ function VoteDetailModal({ vote, onClose }) {
           </div>
           <div className="flex items-center">
             <FaVoteYea className="text-blue-500 mr-2" />
-            <p className="text-lg font-medium"><strong>Candidato:</strong> {vote.candidate.name} {vote.candidate.lastName}</p>
+            <p className="text-lg font-medium"><strong>Candidato:</strong> {vote.candidate.name} {vote.candidate.lastname}</p>
           </div>
           <div className="flex items-center">
             <FaCalendarAlt className="text-blue-500 mr-2" />

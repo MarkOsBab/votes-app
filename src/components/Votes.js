@@ -50,7 +50,7 @@ function Votes({ votes, totalPages, currentPage, setCurrentPage, loading }) {
               votes.map((vote) => (
                 <tr key={vote.id} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border-b border-gray-300">{vote.voter.name}</td>
-                  <td className="py-2 px-4 border-b border-gray-300">{vote.candidate.name}</td>
+                  <td className="py-2 px-4 border-b border-gray-300">{vote.candidate.name} {vote.candidate.lastname}</td>
                   <td className="py-2 px-4 border-b border-gray-300">{new Date(vote.date).toLocaleDateString()}</td>
                   <td className="py-2 px-4 border-b border-gray-300">
                     <button 

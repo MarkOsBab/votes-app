@@ -13,7 +13,7 @@ function WinningCandidate({ candidate }) {
       </div>
       <div className="ml-4 w-full">
         <h2 className="lg:text-2xl md:text-xl sm:text-lg text-xl font-extrabold text-gray-800">Candidato más votado</h2>
-        <p className="lg:text-xl md:text-lg sm:text-base text-lg text-gray-600">{candidate.name} {candidate.lastName}</p>
+        <p className="lg:text-xl md:text-lg sm:text-base text-lg text-gray-600">{candidate.name} {candidate.lastname}</p>
         <p className="text-gray-500 lg:text-3xl md:text-2xl sm:text-xl text-2xl text-end">Votos: #{candidate.total}</p>
       </div>
     </div>
